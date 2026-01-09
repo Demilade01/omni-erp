@@ -8,6 +8,7 @@ import { env, isDevelopment } from './config/env';
 import { morganStream } from './config/logger';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { swaggerSpec } from './config/swagger';
+import apiRoutes from './routes';
 
 // Create Express app
 const app: Application = express();
@@ -140,12 +141,14 @@ app.get('/api', (_req, res) => {
   });
 });
 
-// Mount route modules here
-// app.use('/api/auth', authRoutes);
-// app.use('/api/erp', erpRoutes);
-// app.use('/api/workflows', workflowRoutes);
-// app.use('/api/ai', aiRoutes);
-// app.use('/api/mcp', mcpRoutes);
+// Mount API routes
+app.use('/api/v1', apiRoutes);
+
+// Additional routes will be mounted here as they are created
+// app.use('/api/v1/erp', erpRoutes);
+// app.use('/api/v1/workflows', workflowRoutes);
+// app.use('/api/v1/ai', aiRoutes);
+// app.use('/api/v1/mcp', mcpRoutes);
 
 // 404 handler - must be after all routes
 app.use(notFoundHandler);

@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import authRoutes from './auth.routes';
+import apiKeyRoutes from './apiKey.routes';
 
 const router = Router();
 
@@ -40,11 +42,13 @@ router.get('/', (_req, res) => {
   });
 });
 
-// Mount route modules here as they are created
-// import authRoutes from './auth.routes';
+// Mount route modules
+router.use('/auth', authRoutes);
+router.use('/api-keys', apiKeyRoutes);
+
+// Additional routes will be added here as they are created
 // import userRoutes from './user.routes';
 // import erpRoutes from './erp.routes';
-// router.use('/auth', authRoutes);
 // router.use('/users', userRoutes);
 // router.use('/erp', erpRoutes);
 
