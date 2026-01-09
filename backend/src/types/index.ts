@@ -44,17 +44,25 @@ export interface JWTPayload {
 // ERP Connection Types
 export enum ERPType {
   SAP = 'sap',
+  ORACLE = 'oracle',
+  MICROSOFT_DYNAMICS = 'microsoft_dynamics',
+  SALESFORCE = 'salesforce',
+  NETSUITE = 'netsuite',
+  QUICKBOOKS = 'quickbooks',
+  SAGE = 'sage',
   SUCCESSFACTORS = 'successfactors',
   WORKDAY = 'workday',
-  GENERIC_REST = 'generic_rest',
-  GENERIC_ODATA = 'generic_odata',
+  CUSTOM_REST = 'custom_rest',
+  CUSTOM_ODATA = 'custom_odata',
 }
 
 export enum AuthType {
   OAUTH2 = 'oauth2',
   API_KEY = 'api_key',
   BASIC = 'basic',
+  BEARER = 'bearer',
   JWT = 'jwt',
+  CUSTOM = 'custom',
 }
 
 export interface ERPConnectionConfig {
@@ -71,6 +79,7 @@ export enum WorkflowStatus {
   DRAFT = 'draft',
   ACTIVE = 'active',
   PAUSED = 'paused',
+  ARCHIVED = 'archived',
   COMPLETED = 'completed',
   FAILED = 'failed',
 }
