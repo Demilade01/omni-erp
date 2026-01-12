@@ -4,17 +4,36 @@ import { ERPType, AuthType } from '../types';
 export interface IERPConnection extends Document {
   userId: Types.ObjectId;
   name: string;
+  description?: string;
   type: ERPType;
   baseUrl: string;
   authType: AuthType;
   credentials: {
     clientId?: string;
     clientSecret?: string;
+    tokenUrl?: string;
+    scope?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    expiresAt?: Date;
     apiKey?: string;
+    headerName?: string;
+    prefix?: string;
     username?: string;
     password?: string;
+    token?: string;
     tenantId?: string;
     companyId?: string;
+    [key: string]: any;
+  };
+  config?: {
+    timeout?: number;
+    retryAttempts?: number;
+    retryDelay?: number;
+    rateLimit?: {
+      maxRequests: number;
+      windowMs: number;
+    };
     [key: string]: any;
   };
   metadata?: {
@@ -26,6 +45,7 @@ export interface IERPConnection extends Document {
   status: 'active' | 'inactive' | 'error';
   lastTested?: Date;
   lastSync?: Date;
+  lastConnectionAt?: Date;
   errorMessage?: string;
   isActive: boolean;
   createdAt: Date;
@@ -45,6 +65,11 @@ const erpConnectionSchema = new Schema<IERPConnection>(
       required: [true, 'Connection name is required'],
       trim: true,
       maxlength: [100, 'Name cannot exceed 100 characters'],
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [500, 'Description cannot exceed 500 characters'],
     },
     type: {
       type: String,
@@ -66,6 +91,10 @@ const erpConnectionSchema = new Schema<IERPConnection>(
       required: true,
       select: false, // Don't return credentials by default
     },
+    config: {
+      type: Schema.Types.Mixed,
+      default: {},
+    },
     metadata: {
       type: Schema.Types.Mixed,
       default: {},
@@ -79,6 +108,9 @@ const erpConnectionSchema = new Schema<IERPConnection>(
       type: Date,
     },
     lastSync: {
+      type: Date,
+    },
+    lastConnectionAt: {
       type: Date,
     },
     errorMessage: {
