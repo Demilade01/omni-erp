@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authRoutes from './auth.routes';
 import apiKeyRoutes from './apiKey.routes';
+import connectorRoutes from './connector.routes';
 
 const router = Router();
 
@@ -32,8 +33,8 @@ router.get('/', (_req, res) => {
     version: '1.0.0',
     endpoints: {
       auth: '/api/v1/auth',
-      users: '/api/v1/users',
-      erp: '/api/v1/erp',
+      apiKeys: '/api/v1/api-keys',
+      connectors: '/api/v1/connectors',
       workflows: '/api/v1/workflows',
       ai: '/api/v1/ai',
       mappings: '/api/v1/mappings',
@@ -45,12 +46,11 @@ router.get('/', (_req, res) => {
 // Mount route modules
 router.use('/auth', authRoutes);
 router.use('/api-keys', apiKeyRoutes);
+router.use('/connectors', connectorRoutes);
 
 // Additional routes will be added here as they are created
 // import userRoutes from './user.routes';
-// import erpRoutes from './erp.routes';
 // router.use('/users', userRoutes);
-// router.use('/erp', erpRoutes);
 
 export default router;
 
