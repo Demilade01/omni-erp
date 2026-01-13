@@ -270,8 +270,12 @@ const options: swaggerJsdoc.Options = {
         description: 'User management operations',
       },
       {
-        name: 'ERP Connections',
-        description: 'Manage ERP system connections',
+        name: 'Connectors',
+        description: 'Manage ERP connector configurations',
+      },
+      {
+        name: 'Connector Data',
+        description: 'Execute REST/OData requests through connectors',
       },
       {
         name: 'Workflows',
@@ -279,7 +283,7 @@ const options: swaggerJsdoc.Options = {
       },
       {
         name: 'AI',
-        description: 'AI-powered features and services',
+        description: 'AI-powered features (OpenAI GPT)',
       },
       {
         name: 'Data Mapping',

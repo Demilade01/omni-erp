@@ -2,6 +2,7 @@ import { Router } from 'express';
 import authRoutes from './auth.routes';
 import apiKeyRoutes from './apiKey.routes';
 import connectorRoutes from './connector.routes';
+import aiRoutes from './ai.routes';
 
 const router = Router();
 
@@ -47,6 +48,7 @@ router.get('/', (_req, res) => {
 router.use('/auth', authRoutes);
 router.use('/api-keys', apiKeyRoutes);
 router.use('/connectors', connectorRoutes);
+router.use('/ai', aiRoutes);
 
 // Additional routes will be added here as they are created
 // import userRoutes from './user.routes';
