@@ -31,3 +31,11 @@ export { CircuitBreaker } from './http/CircuitBreaker';
 export { RateLimiter } from './utils/RateLimiter';
 export { ConnectionTester } from './utils/ConnectionTester';
 
+// REST Connector
+export { RESTConnector, QueryBuilder } from './rest';
+export * from './rest/types';
+
+// OData Connector
+export { ODataConnector, ODataQueryBuilder } from './odata';
+export * from './odata/types';
+

@@ -4,11 +4,12 @@
  */
 
 import { logger } from '../config/logger';
-import { BaseConnector } from '../connectors';
+import { BaseConnector, RESTConnector, ODataConnector } from '../connectors';
 import { ERPConnection } from '../models';
 import { createNotFoundError, createValidationError } from '../utils/appError';
 import { ConnectorConfig, ConnectorStatus } from '../connectors/types/connector.types';
-import { AuthType } from '../types';
+import { ODataConnectorConfig, ODataVersion } from '../connectors/odata/types';
+import { AuthType, ERPType } from '../types';
 
 /**
  * Connector Service Class
@@ -219,17 +220,62 @@ class ConnectorService {
 
   /**
    * Create connector instance based on ERP type
-   * NOTE: This will be extended when we implement specific connectors (REST, OData, etc.)
    */
   private async createConnectorInstance(
     config: ConnectorConfig
   ): Promise<BaseConnector> {
-    // For now, we'll throw an error until we implement specific connectors
-    // This will be replaced with actual connector implementations in Task 5 & 6
-    throw new Error(
-      `Connector implementation for ${config.erpType} not yet available. ` +
-      `Will be implemented in Task 5 (REST Connector) and Task 6 (OData Connector).`
-    );
+    logger.debug(`[${config.id}] Creating connector instance for ${config.erpType}`);
+
+    switch (config.erpType) {
+      // REST API Connectors
+      case ERPType.CUSTOM_REST:
+      case ERPType.SALESFORCE:
+      case ERPType.NETSUITE:
+      case ERPType.QUICKBOOKS:
+      case ERPType.WORKDAY:
+        return new RESTConnector(config, {
+          autoParseJSON: true,
+          autoPaginate: false,
+          arrayFormat: 'bracket',
+        });
+
+      // OData Connectors
+      case ERPType.CUSTOM_ODATA:
+      case ERPType.SAP:
+      case ERPType.MICROSOFT_DYNAMICS:
+        // Determine OData version (v4 by default, v2 for older SAP systems)
+        const odataVersion =
+          config.erpType === ERPType.SAP
+            ? ODataVersion.V2 // SAP often uses v2
+            : ODataVersion.V4; // Modern systems use v4
+
+        const odataConfig: ODataConnectorConfig = {
+          ...config,
+          version: odataVersion,
+          serviceRoot: config.baseUrl,
+          csrf: config.erpType === ERPType.SAP, // Enable CSRF for SAP
+          useBatch: false,
+          maxBatchSize: 50,
+        };
+
+        return new ODataConnector(odataConfig);
+
+      // Other ERP types (default to REST)
+      case ERPType.ORACLE:
+      case ERPType.SAGE:
+      case ERPType.SUCCESSFACTORS:
+        return new RESTConnector(config, {
+          autoParseJSON: true,
+          autoPaginate: false,
+          arrayFormat: 'bracket',
+        });
+
+      default:
+        throw createValidationError(
+          `Unsupported ERP type: ${config.erpType}. ` +
+          `Supported types: ${Object.values(ERPType).join(', ')}`
+        );
+    }
   }
 }
 
