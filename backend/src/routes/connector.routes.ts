@@ -6,6 +6,7 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth';
 import * as connectorController from '../controllers/connector.controller';
+import * as connectorDataController from '../controllers/connectorData.controller';
 
 const router = Router();
 
@@ -361,6 +362,47 @@ router.get('/:id/status', authenticate, connectorController.getConnectorStatus);
  *         description: Connector metrics
  */
 router.get('/:id/metrics', authenticate, connectorController.getConnectorMetrics);
+
+// ==========================================
+// REST CONNECTOR DATA OPERATIONS
+// ==========================================
+
+/**
+ * @swagger
+ * tags:
+ *   name: Connector Data
+ *   description: Execute requests through connectors
+ */
+
+// REST operations
+router.post('/:id/rest/get', authenticate, connectorDataController.restGet);
+router.post('/:id/rest/post', authenticate, connectorDataController.restPost);
+router.post('/:id/rest/put', authenticate, connectorDataController.restPut);
+router.post('/:id/rest/patch', authenticate, connectorDataController.restPatch);
+router.post('/:id/rest/delete', authenticate, connectorDataController.restDelete);
+
+// ==========================================
+// ODATA CONNECTOR DATA OPERATIONS
+// ==========================================
+
+// OData query operations
+router.post('/:id/odata/query', authenticate, connectorDataController.odataQuery);
+router.post('/:id/odata/entity', authenticate, connectorDataController.odataGetEntity);
+router.post('/:id/odata/all', authenticate, connectorDataController.odataGetAll);
+router.post('/:id/odata/count', authenticate, connectorDataController.odataCount);
+
+// OData CRUD operations
+router.post('/:id/odata/create', authenticate, connectorDataController.odataCreate);
+router.post('/:id/odata/update', authenticate, connectorDataController.odataUpdate);
+router.post('/:id/odata/patch', authenticate, connectorDataController.odataPatch);
+router.post('/:id/odata/delete', authenticate, connectorDataController.odataDelete);
+
+// OData function/action calls
+router.post('/:id/odata/function', authenticate, connectorDataController.odataCallFunction);
+router.post('/:id/odata/action', authenticate, connectorDataController.odataCallAction);
+
+// OData batch operations
+router.post('/:id/odata/batch', authenticate, connectorDataController.odataBatch);
 
 export default router;
 
