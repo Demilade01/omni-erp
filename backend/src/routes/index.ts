@@ -3,6 +3,8 @@ import authRoutes from './auth.routes';
 import apiKeyRoutes from './apiKey.routes';
 import connectorRoutes from './connector.routes';
 import aiRoutes from './ai.routes';
+import workflowRoutes from './workflow.routes';
+import mappingRoutes from './mapping.routes';
 
 const router = Router();
 
@@ -49,6 +51,8 @@ router.use('/auth', authRoutes);
 router.use('/api-keys', apiKeyRoutes);
 router.use('/connectors', connectorRoutes);
 router.use('/ai', aiRoutes);
+router.use('/workflows', workflowRoutes);
+router.use('/mappings', mappingRoutes);
 
 // Additional routes will be added here as they are created
 // import userRoutes from './user.routes';

@@ -6,4 +6,4 @@
 export * from './types';
 export * from './ODataQueryBuilder';
 export * from './ODataConnector';
-
+export * from './ODataMetadataParser';

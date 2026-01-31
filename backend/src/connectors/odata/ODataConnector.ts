@@ -6,6 +6,7 @@
 
 import { BaseConnector } from '../base/BaseConnector';
 import { ODataQueryBuilder } from './ODataQueryBuilder';
+import { ODataMetadataParser } from './ODataMetadataParser';
 import { logger } from '../../config/logger';
 import {
   ODataVersion,
@@ -29,6 +30,7 @@ export class ODataConnector extends BaseConnector {
   protected metadata?: ODataServiceMetadata;
   protected useBatch: boolean;
   protected maxBatchSize: number;
+  protected metadataParser: ODataMetadataParser;
 
   constructor(config: ODataConnectorConfig) {
     super(config);
@@ -36,6 +38,7 @@ export class ODataConnector extends BaseConnector {
     this.serviceRoot = config.serviceRoot || config.baseUrl;
     this.useBatch = config.useBatch ?? false;
     this.maxBatchSize = config.maxBatchSize || 50;
+    this.metadataParser = new ODataMetadataParser(this.version);
   }
 
 
@@ -113,17 +116,19 @@ export class ODataConnector extends BaseConnector {
 
   /**
    * Parse service metadata
-   * Note: This is a simplified implementation
-   * In production, use a proper XML parser like 'fast-xml-parser'
+   * Uses fast-xml-parser for proper XML parsing
    */
-  private parseMetadata(_xmlData: string): ODataServiceMetadata {
-    // TODO: Implement proper XML parsing
-    // For now, return a basic structure
-    return {
-      version: this.version,
-      entityTypes: [],
-      entitySets: [],
-    };
+  private parseMetadata(xmlData: string): ODataServiceMetadata {
+    try {
+      return this.metadataParser.parse(xmlData);
+    } catch (error) {
+      logger.error(`[${this.config.id}] Failed to parse metadata:`, error);
+      return {
+        version: this.version,
+        entityTypes: [],
+        entitySets: [],
+      };
+    }
   }
 
   /**
