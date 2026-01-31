@@ -10,14 +10,10 @@ import { contextManager, ContextManager } from './ContextManager';
 import { tokenCounter, TokenCounter } from './TokenCounter';
 import {
   AIModel,
-  ChatMessage,
-  MessageRole,
   CompletionOptions,
   AIResponse,
   StreamingChunk,
   PromptCategory,
-  AIError,
-  AIErrorType,
 } from './types';
 
 /**
